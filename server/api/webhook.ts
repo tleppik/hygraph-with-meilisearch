@@ -1,4 +1,4 @@
-export default defineEventHandler((event) => {
+export default defineEventHandler(async  (event) => {
     
     if (event.node.req.method === 'GET') {
         return "wrong type";
