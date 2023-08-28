@@ -12,5 +12,9 @@
     "@nuxt/devtools": "latest",
     "netlify-cli": "^16.1.0",
     "nuxt": "^3.7.0"
+  },
+  "dependencies": {
+    "@graphcms/rich-text-html-renderer": "^0.3.0",
+    "meilisearch": "^0.34.1"
   }
 }
