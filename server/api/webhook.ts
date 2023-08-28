@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
     if (event.node.req.method === 'POST') {
 
         try {
-            const body = await readBody(event);
-            const faq = JSON.parse(body);
+            const article = await readBody(event);
+            const faq = article;
     
             const locale = faq.data.localizations;
             const content = locale[0].answer.raw;
