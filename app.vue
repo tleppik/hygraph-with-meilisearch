@@ -1,5 +1,5 @@
 <template>
   <div>
-    <NuxtWelcome />
+    <h1>hygraph with meilisearch</h1>
   </div>
 </template>
