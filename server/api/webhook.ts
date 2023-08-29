@@ -19,19 +19,11 @@ export default defineEventHandler(async (event) => {
             const signature = event.node.req.headers['gcms-signature'];
             const isValid = verifyWebhookSignature( body, signature, secret );
 
-            return {
-                secret,
-                signature,
-                isValid,
-                body
-            }
-
-            const article = body;
-
             if (!isValid) {
                 throw createError({ statusCode: 403, statusMessage: 'No Permissions '})
             }
 
+            const article = body;
             const document: FAQ = convertToFAQ(article);
 
             const meilisearch = {

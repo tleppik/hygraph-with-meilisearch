@@ -1,20 +1,29 @@
 import { MeiliSearch } from 'meilisearch'
 import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
+import { verifyWebhookSignature } from "~/server/utils/signature";
 
 export default defineEventHandler(async (event) => {
 
-    if (event.node.req.headers['authorization'] !== process.env.HYGRAPH_WEBHOOK_TOKEN) {
-        throw createError({ statusCode: 403, statusMessage: 'No Permissions' })
-    }
-
-    if (event.node.req.method === 'GET') {
+    if (event.node.req.method !== 'POST') {
         throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
     }
 
     if (event.node.req.method === 'POST') {
 
         try {
-            const article = await readBody(event);
+
+            const body = await readBody(event);
+
+            // check secret key and validation
+            const secret = process.env.HYGRAPH_WEBHOOK_TOKEN;
+            const signature = event.node.req.headers['gcms-signature'];
+            const isValid = verifyWebhookSignature( body, signature, secret );
+
+            if (!isValid) {
+                throw createError({ statusCode: 403, statusMessage: 'No Permissions '})
+            }
+
+            const article = body;
             const document: FAQ = convertToFAQ(article);
 
             const meilisearch = {
