@@ -1,4 +1,4 @@
-import hmacSHA512 from 'crypto-js/hmac-sha512';
+import { createHmac } from "crypto";
 
 export function verifyWebhookSignature(body, signature, secret) {
     const [rawSign, rawEnv, rawTimestamp] = signature.split(", ");
@@ -13,7 +13,7 @@ export function verifyWebhookSignature(body, signature, secret) {
         TimeStamp: Timestamp,
     });
 
-    const hash = hmacSHA512("sha256", secret).update(payload).digest("base64");
+    const hash = createHmac("sha256", secret).update(payload).digest("base64");
 
     const isValid = sign === hash
 
