@@ -18,6 +18,14 @@ export default defineEventHandler(async (event) => {
             const secret = process.env.HYGRAPH_WEBHOOK_TOKEN;
             const signature = event.node.req.headers['gcms-signature'];
             const isValid = verifyWebhookSignature({ article, signature, secret });
+
+            return {
+                secret,
+                signature,
+                isValid,
+                article
+            }
+            
             if (!isValid) {
                 throw createError({ statusCode: 403, statusMessage: 'No Permissions '})
             }
