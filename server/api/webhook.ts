@@ -1,6 +1,6 @@
 import { MeiliSearch } from 'meilisearch'
 import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
-const { verifyWebhookSignature } = require('@hygraph/utils');
+import { verifyWebhookSignature } from '@hygraph/utils';
 
 export default defineEventHandler(async (event) => {
 
