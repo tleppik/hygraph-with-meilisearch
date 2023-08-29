@@ -3,11 +3,13 @@ import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
 
 export default defineEventHandler(async (event) => {
 
-    if (event.node.req.headers['authorization'] !== process.env.HYGRAPH_WEBHOOK_TOKEN) {
+    return event.node.req.headers;
+
+    if (event.node.req.headers['Authorization'] !== process.env.HYGRAPH_WEBHOOK_TOKEN) {
         throw createError({ statusCode: 403, statusMessage: 'No Permissions ' + event.node.req.headers['authorization'] + ' ' + process.env.HYGRAPH_WEBHOOK_TOKEN})
     }
 
-    if (event.node.req.method === 'GET') {
+    if (event.node.req.method !== 'POST') {
         throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
     }
 
