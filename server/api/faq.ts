@@ -1,11 +1,11 @@
 import { MeiliSearch } from 'meilisearch'
-import { astToHtmlString } from '@graphcms/rich-text-html-renderer';
+import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
 
 export default defineEventHandler(async (event) => {
 
-    // if(event.node.req.headers['Authorization']) {
-    //     console.log("Authorization", event.node.req.headers['Authorization']);
-    // }
+    if (event.node.req.headers['authorization'] !== process.env.HYGRAPH_WEBHOOK_TOKEN) {
+        throw createError({ statusCode: 403, statusMessage: 'No Permissions' })
+    }
 
     if (event.node.req.method === 'GET') {
         throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
@@ -15,21 +15,7 @@ export default defineEventHandler(async (event) => {
 
         try {
             const article = await readBody(event);
-            const faq = article;
-    
-            const locale = faq.data.localizations;
-            const content = locale[0].answer.raw;
-    
-            const answer = astToHtmlString({
-                content,
-            });
-    
-            const document = {
-                id: faq.data.id,
-                created: faq.data.createdAt,
-                answer: answer,
-                question: locale[0].question
-            }
+            const document: FAQ = convertToFAQ(article);
 
             const meilisearch = {
                 host: process.env.MEILISEARCH_URL,
