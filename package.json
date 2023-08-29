@@ -10,12 +10,14 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@types/crypto-js": "^4.1.1",
     "netlify-cli": "^16.1.0",
     "nuxt": "^3.7.0"
   },
   "dependencies": {
     "@graphcms/rich-text-html-renderer": "^0.3.0",
     "@hygraph/utils": "^1.2.1",
+    "crypto-js": "^4.1.1",
     "meilisearch": "^0.34.1"
   }
 }

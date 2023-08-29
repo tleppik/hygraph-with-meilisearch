@@ -1,6 +1,6 @@
 import { MeiliSearch } from 'meilisearch'
 import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
-import { verifyWebhookSignature } from '@hygraph/utils';
+import { verifyWebhookSignature } from "~/server/utils/signature";
 
 export default defineEventHandler(async (event) => {
 
@@ -12,20 +12,22 @@ export default defineEventHandler(async (event) => {
 
         try {
 
-            const article = await readBody(event);
+            const body = await readBody(event);
 
             // check secret key and validation
             const secret = process.env.HYGRAPH_WEBHOOK_TOKEN;
             const signature = event.node.req.headers['gcms-signature'];
-            const isValid = verifyWebhookSignature({ article, signature, secret });
+            const isValid = verifyWebhookSignature( body, signature, secret );
 
             return {
                 secret,
                 signature,
                 isValid,
-                article
+                body
             }
-            
+
+            const article = body;
+
             if (!isValid) {
                 throw createError({ statusCode: 403, statusMessage: 'No Permissions '})
             }
