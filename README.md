@@ -1,63 +1,26 @@
-# Nuxt 3 Minimal Starter
+# Hygraph ⨯ Meilisearch
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Using [Hygraph webhooks]('https://hygraph.com/docs/api-reference/basics/webhooks') to sync data to [Meilisearch]('https://www.meilisearch.com/') Cloud on new published content.
 
-## Setup
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tleppik/hygraph-with-meilisearch)
 
-Make sure to install the dependencies:
+(If you click this button, it will create a new repo for you that looks exactly like this one, and sets that repo up immediately for deployment on Netlify)
 
-```bash
-# npm
-npm install
+## How to use
 
-# pnpm
-pnpm install
+### Set up Meiliesearch
+* Create Meilisearch account
+* Insert an Meilisearch index e.g. ``hygraph``
 
-# yarn
-yarn install
-```
+### Set up Hygraph Webhook
+* Add [Webhook]('https://hygraph.com/docs/api-reference/basics/webhooks')
+* Add a secret key** to sign the payload of your webhook
 
-## Development Server
+### Set up Project (Webhook)
+* Enter your Meilisearch host url into ``.env`` as ``MEILISEARCH_URL``
+* Enter your Meilisearch index name into ``.env`` as ``MEILISEARCH_INDEX``
+* Enter your Meilisearch Admin API key into ``.env`` as ``MEILISEARCH_API_KEY``
+* Enter your Hygraph Secret Key** into ``.env`` as ``HYGRAPH_WEBHOOK_TOKEN``
 
-Start the development server on `http://localhost:3000`:
 
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+** [Hygraph signed webhooks]('https://hygraph.com/blog/introducing-signed-webhooks')
