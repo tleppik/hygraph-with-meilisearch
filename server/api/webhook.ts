@@ -1,13 +1,8 @@
 import { MeiliSearch } from 'meilisearch'
 import { FAQ, convertToFAQ } from "~/server/utils/schemes/faq";
+const { verifyWebhookSignature } = require('@hygraph/utils');
 
 export default defineEventHandler(async (event) => {
-
-    return event.node.req.headers;
-
-    if (event.node.req.headers['Authorization'] !== process.env.HYGRAPH_WEBHOOK_TOKEN) {
-        throw createError({ statusCode: 403, statusMessage: 'No Permissions ' + event.node.req.headers['authorization'] + ' ' + process.env.HYGRAPH_WEBHOOK_TOKEN})
-    }
 
     if (event.node.req.method !== 'POST') {
         throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
@@ -16,7 +11,17 @@ export default defineEventHandler(async (event) => {
     if (event.node.req.method === 'POST') {
 
         try {
+
             const article = await readBody(event);
+
+            // check secret key and validation
+            const secret = process.env.HYGRAPH_WEBHOOK_TOKEN;
+            const signature = event.node.req.headers['gcms-signature'];
+            const isValid = verifyWebhookSignature({ article, signature, secret });
+            if (!isValid) {
+                throw createError({ statusCode: 403, statusMessage: 'No Permissions '})
+            }
+
             const document: FAQ = convertToFAQ(article);
 
             const meilisearch = {
